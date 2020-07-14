@@ -26,7 +26,7 @@ const App: () => React$Node = () => {
         <ScrollView
           contentInsetAdjustmentBehavior="automatic"
           style={styles.scrollView}>
-          <Text>Text</Text>
+          <Text>Text 2</Text>
           <MyRNCamera />
         </ScrollView>
       </SafeAreaView>

@@ -27,9 +27,11 @@ export default class MyRNCamera extends PureComponent {
             buttonPositive: 'Ok',
             buttonNegative: 'Cancel',
           }}
-          onGoogleVisionBarcodesDetected={({barcodes}) => {
-            console.log(barcodes);
+          onBarCodeRead={(event) => {
+            console.log(event);
           }}
+          doNotSave={true}
+          base64={true}
         />
         <View style={{flex: 0, flexDirection: 'row', justifyContent: 'center'}}>
           <TouchableOpacity
