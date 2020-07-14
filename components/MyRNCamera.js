@@ -1,12 +1,18 @@
 'use strict';
 import React, {PureComponent} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {captureScreen} from 'react-native-view-shot';
 import {RNCamera} from 'react-native-camera';
 
 export default class MyRNCamera extends PureComponent {
   render() {
     return (
-      <View style={styles.container}>
+      <View
+          style={styles.container}
+          ref={(ref) => {
+            this.view = ref;
+          }}
+      >
         <RNCamera
           ref={(ref) => {
             this.camera = ref;
@@ -46,10 +52,19 @@ export default class MyRNCamera extends PureComponent {
 
   takePicture = async () => {
     if (this.camera) {
-      this.camera.resumePreview();
-      const options = {quality: 0.5, base64: true};
-      const data = await this.camera.takePictureAsync(options);
-      console.log(data.uri);
+      // this.camera.resumePreview();
+      // const options = {quality: 0.5, base64: true};
+      // const data = await this.camera.takePictureAsync(options);
+      // console.log(data.uri);
+      captureScreen({
+        result: "base64",
+        format: "png",
+        quality: 0.1,
+        width: 320,
+      }).then(
+          data => console.log('Image', data),
+          error => console.error("Some thing went wrong", error),
+          )
     }
   };
 }
@@ -65,7 +80,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'center',
     width: '100%',
-    height: 550,
+    height: 400,
   },
   capture: {
     flex: 0,
