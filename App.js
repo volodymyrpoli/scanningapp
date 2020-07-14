@@ -12,7 +12,7 @@ import {
   StyleSheet,
   ScrollView,
   StatusBar,
-  Text,
+  Text, FlatList, View,
 } from 'react-native';
 import MyRNCamera from './components/MyRNCamera.js';
 
@@ -26,9 +26,9 @@ const App: () => React$Node = () => {
         <ScrollView
           contentInsetAdjustmentBehavior="automatic"
           style={styles.scrollView}>
-          <Text>Text 2</Text>
           <MyRNCamera />
         </ScrollView>
+
       </SafeAreaView>
     </>
   );

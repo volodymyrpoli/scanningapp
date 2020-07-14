@@ -1,18 +1,31 @@
 'use strict';
 import React, {PureComponent} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {captureScreen} from 'react-native-view-shot';
+import {StyleSheet, TouchableOpacity, Text, View } from 'react-native';
 import {RNCamera} from 'react-native-camera';
 
 export default class MyRNCamera extends PureComponent {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      barcodes: [],
+    };
+
+    this.press = () => {
+      this.camera.pausePreview();
+      this.camera.resumePreview();
+    };
+  }
+
   render() {
     return (
       <View
-          style={styles.container}
-          ref={(ref) => {
-            this.view = ref;
-          }}
-      >
+        style={styles.container}
+        ref={(ref) => {
+          this.view = ref;
+        }}>
+        <Text style={{color: 'white', minHeight: 80}}>{"Barcodes: \n" + this.state.barcodes.join('\n')}</Text>
         <RNCamera
           ref={(ref) => {
             this.camera = ref;
@@ -33,40 +46,32 @@ export default class MyRNCamera extends PureComponent {
             buttonPositive: 'Ok',
             buttonNegative: 'Cancel',
           }}
-          onBarCodeRead={(event) => {
-            console.log(event);
+          onGoogleVisionBarcodesDetected={(event) => {
+            this.setState({
+              barcodes: event.barcodes.map(a => a.data),
+            })
           }}
+          onGoogleVisionBarcodesType={
+            RNCamera.Constants.GoogleVisionBarcodeDetection.BarcodeType.ITF
+            | RNCamera.Constants.GoogleVisionBarcodeDetection.BarcodeType.CODE_39
+            | RNCamera.Constants.GoogleVisionBarcodeDetection.BarcodeType.CODE_128
+          }
           doNotSave={true}
           base64={true}
         />
-        <View style={{flex: 0, flexDirection: 'row', justifyContent: 'center'}}>
+        <View>
           <TouchableOpacity
-            onPress={this.takePicture.bind(this)}
-            style={styles.capture}>
-            <Text style={{fontSize: 14}}> SNAP </Text>
+            style={styles.capture}
+            onPress={this.press}
+            >
+            <Text>
+              Reset
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
     );
   }
-
-  takePicture = async () => {
-    if (this.camera) {
-      // this.camera.resumePreview();
-      // const options = {quality: 0.5, base64: true};
-      // const data = await this.camera.takePictureAsync(options);
-      // console.log(data.uri);
-      captureScreen({
-        result: "base64",
-        format: "png",
-        quality: 0.1,
-        width: 320,
-      }).then(
-          data => console.log('Image', data),
-          error => console.error("Some thing went wrong", error),
-          )
-    }
-  };
 }
 
 const styles = StyleSheet.create({
